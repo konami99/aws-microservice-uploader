@@ -12,4 +12,3 @@ jobs:
           aws-region: us-east-2
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_STAGING }}
           role-duration-seconds: 1200
-          role-session-name: StagingDeploymentSession
