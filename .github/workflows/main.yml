@@ -41,3 +41,12 @@ jobs:
           terraform workspace list
           terraform workspace select staging || terraform workspace new staging
           terraform plan
+
+      - name: Terraform Apply
+        run: |
+          export $(grep -v '^#' .env.staging | xargs -0)
+          cd infra
+          terraform workspace list
+          terraform workspace select staging || terraform workspace new staging
+          terraform apply -auto-approve
+
