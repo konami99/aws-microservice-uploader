@@ -18,8 +18,8 @@ provider "aws" {
   region = "us-west-2"
 }
 
-resource "aws_s3_bucket" "aws-microservice-uploader-konami99-richard-chou" {
-  bucket = "uploader"
+resource "aws_s3_bucket" "uploader" {
+  bucket = "aws-microservice-uploader"
   acl    = "private"
 
   versioning {
@@ -41,7 +41,7 @@ resource "aws_sns_topic" "s3-event-notification" {
         "Action": "SNS:Publish",
         "Resource": "arn:aws:sns:*:*:s3-event-notification-topic",
         "Condition":{
-            "ArnLike":{"aws:SourceArn":"${aws_s3_bucket.aws-microservice-uploader-konami99-richard-chou.arn}"}
+            "ArnLike":{"aws:SourceArn":"${aws_s3_bucket.uploader.arn}"}
         }
     }]
 }
@@ -49,7 +49,7 @@ POLICY
 }
 
 resource "aws_s3_bucket_notification" "bucket_notification" {
-  bucket = aws_s3_bucket.aws-microservice-uploader-konami99-richard-chou.id
+  bucket = aws_s3_bucket.uploader.id
 
   topic {
     topic_arn = aws_sns_topic.s3-event-notification.arn
