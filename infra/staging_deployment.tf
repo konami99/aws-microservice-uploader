@@ -18,7 +18,7 @@ provider "aws" {
   region = "us-west-2"
 }
 
-resource "aws_s3_bucket" "uploader" {
+resource "aws_s3_bucket" "${locals.common_tags.project}" {
   bucket = "uploader"
   acl    = "private"
 
