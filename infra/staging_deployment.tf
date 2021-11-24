@@ -17,3 +17,14 @@ terraform {
 provider "aws" {
   region = "us-west-2"
 }
+
+resource "aws_s3_bucket" "uploader" {
+  bucket = "uploader"
+  acl    = "private"
+
+  versioning {
+    enabled = true
+  }
+
+  tags = local.common_tags
+}
