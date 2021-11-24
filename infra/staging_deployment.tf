@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "uploader" {
-  bucket = "aws-microservice-uploader"
+  bucket = "uploader-konami99"
   acl    = "private"
 
   versioning {
