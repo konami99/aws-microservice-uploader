@@ -28,4 +28,16 @@ jobs:
 
       - name: Terraform Init
         working-directory: infra
-        run: terraform init -backend-config="key=state" -backend-config="region=us-west-2"
+        run: terraform init"
+        
+      - name: Terraform Validate
+        working-directory: infra
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        run: |
+          export $(grep -v '^#' .env.staging | xargs -0)
+          cd infra
+          terraform workspace list
+          terraform workspace select staging || terraform workspace new staging
+          terraform plan
