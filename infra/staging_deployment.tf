@@ -56,3 +56,11 @@ resource "aws_s3_bucket_notification" "bucket_notification" {
     events    = ["s3:ObjectCreated:*"]
   }
 }
+
+resource "aws_ssm_parameter" "sns-arn" {
+  name  = "sns_arn"
+  type  = "SecureString"
+  value = aws_sns_topic.s3-event-notification.arn
+
+  tags = local.common_tags
+}
