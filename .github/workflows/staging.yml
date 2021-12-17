@@ -36,7 +36,9 @@ jobs:
         
       - name: Terraform Validate
         working-directory: infra
-        run: terraform validate
+        run: |
+          terraform init -backend=false
+          terraform validate
 
       - name: Terraform Plan
         run: |
