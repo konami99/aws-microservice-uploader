@@ -27,9 +27,9 @@ jobs:
         run: terraform fmt
 
       - name: Terraform Init
-        working-directory: infra
         run: |
           export $(grep -v '^#' .env.staging | xargs -0)
+          cd infra
           terraform workspace list
           terraform workspace select staging || terraform workspace new staging
           terraform init -backend-config="bucket=aws-microservice-uploader-$ENV"
