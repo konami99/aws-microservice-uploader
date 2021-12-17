@@ -44,7 +44,7 @@ jobs:
           cd infra
           terraform workspace list
           terraform workspace select staging || terraform workspace new staging
-          terraform plan
+          terraform plan -var "env=$ENV"
 
       - name: Terraform Apply
         run: |
@@ -52,5 +52,5 @@ jobs:
           cd infra
           terraform workspace list
           terraform workspace select staging || terraform workspace new staging
-          terraform apply -auto-approve
+          terraform apply -auto-approve -var "env=$ENV"
 

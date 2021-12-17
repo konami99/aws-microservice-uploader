@@ -19,7 +19,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "uploader" {
-  bucket = "uploader-konami99"
+  bucket = "uploader-konami99-${var.env}"
   acl    = "private"
 
   versioning {
