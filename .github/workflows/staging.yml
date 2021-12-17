@@ -32,7 +32,7 @@ jobs:
           cd infra
           terraform workspace list
           terraform workspace select staging || terraform workspace new staging
-          terraform init -backend-config="bucket=aws-microservice-uploader-$ENV"
+          terraform init -reconfigure -backend-config="bucket=aws-microservice-uploader-$ENV"
         
       - name: Terraform Validate
         working-directory: infra
