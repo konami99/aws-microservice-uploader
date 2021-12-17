@@ -1,0 +1,58 @@
+on: push
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials for Production
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME_PRODUCTION }}
+          role-duration-seconds: 1200
+          role-session-name: ProductionDeploymentSession
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_wrapper: false
+
+      - name: Terraform Format
+        working-directory: infra
+        run: terraform fmt
+
+      - name: Terraform Init
+        run: |
+          export $(grep -v '^#' .env.production | xargs -0)
+          cd infra
+          terraform init -backend-config="bucket=aws-microservice-uploader-$ENV"
+          terraform workspace list
+          terraform workspace select production || terraform workspace new production
+        
+      - name: Terraform Validate
+        working-directory: infra
+        run: |
+          terraform init -backend=false
+          terraform validate
+
+      - name: Terraform Plan
+        run: |
+          export $(grep -v '^#' .env.production | xargs -0)
+          cd infra
+          terraform workspace list
+          terraform workspace select production || terraform workspace new production
+          terraform plan -var "env=$ENV"
+
+      - name: Terraform Apply
+        run: |
+          export $(grep -v '^#' .env.production | xargs -0)
+          cd infra
+          terraform workspace list
+          terraform workspace select production || terraform workspace new production
+          terraform apply -auto-approve -var "env=$ENV"
+
