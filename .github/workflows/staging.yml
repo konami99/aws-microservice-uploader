@@ -30,9 +30,9 @@ jobs:
         run: |
           export $(grep -v '^#' .env.staging | xargs -0)
           cd infra
+          terraform init -backend-config="bucket=aws-microservice-uploader-$ENV"
           terraform workspace list
           terraform workspace select staging || terraform workspace new staging
-          terraform init -reconfigure -backend-config="bucket=aws-microservice-uploader-$ENV"
         
       - name: Terraform Validate
         working-directory: infra
