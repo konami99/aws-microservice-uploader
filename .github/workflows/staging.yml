@@ -28,7 +28,11 @@ jobs:
 
       - name: Terraform Init
         working-directory: infra
-        run: terraform init
+        run: |
+          export $(grep -v '^#' .env.staging | xargs -0)
+          terraform workspace list
+          terraform workspace select staging || terraform workspace new staging
+          terraform init -backend-config="bucket=aws-microservice-uploader-$ENV"
         
       - name: Terraform Validate
         working-directory: infra

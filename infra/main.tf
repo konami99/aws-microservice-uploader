@@ -8,7 +8,7 @@ locals {
 
 terraform {
   backend "s3" {
-    bucket = "aws-microservice-uploader"
+    // bucket = "aws-microservice-uploader"
     key    = "state"
     region = "us-west-2"
   }
