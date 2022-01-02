@@ -28,12 +28,13 @@ jobs:
 
       - name: Terraform Init
         run: |
-          export $(grep -v '^#' .env.production | xargs -0)
           cd infra
           terraform init -backend-config="bucket=aws-microservice-uploader-$ENV"
           terraform workspace list
           terraform workspace select production || terraform workspace new production
-        
+        env:
+          ENV: production
+
       - name: Terraform Validate
         working-directory: infra
         run: |
@@ -42,17 +43,20 @@ jobs:
 
       - name: Terraform Plan
         run: |
-          export $(grep -v '^#' .env.production | xargs -0)
           cd infra
           terraform workspace list
           terraform workspace select production || terraform workspace new production
           terraform plan -var "env=$ENV"
+        env:
+          ENV: production
+        
 
       - name: Terraform Apply
         run: |
-          export $(grep -v '^#' .env.production | xargs -0)
           cd infra
           terraform workspace list
           terraform workspace select production || terraform workspace new production
           terraform apply -auto-approve -var "env=$ENV"
+        env:
+          ENV: production
 
